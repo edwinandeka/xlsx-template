@@ -234,7 +234,7 @@ You can pass options to `generate()` to set a different return type. use
 
 ## Changelog
 
-### Version 0.2.1
+### Version 0.6.0
 
 * The ability to insert a data matriz was added [[],[]] .
 
