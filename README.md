@@ -91,7 +91,7 @@ above.
 To make this magic happen, you need some code like this:
 
 ```
-    var XlsxTemplate = require('xlsx-template');
+    var XlsxTemplate = require('xlsx-template-matriz');
 
     // Load an XLSX file into memory
     fs.readFile(path.join(__dirname, 'templates', 'template1.xlsx'), function(err, data) {
@@ -160,7 +160,7 @@ above.
 To make this magic happen, you need some code like this:
 
 ```
-    var XlsxTemplate = require('xlsx-template');
+    var XlsxTemplate = require('xlsx-template-matriz');
 
     // Load an XLSX file into memory
     fs.readFile(path.join(__dirname, 'templates', 'template1.xlsx'), function(err, data) {
