@@ -1,4 +1,7 @@
-# XLSX Template
+# XLSX Template matriz
+
+
+based on https://www.npmjs.com/package/xlsx-template
 
 [![Build status](https://api.travis-ci.org/optilude/xlsx-template.png?branch=master)](http://travis-ci.org/optilude/xlsx-template)
 
@@ -130,6 +133,75 @@ You can pass options to `generate()` to set a different return type. use
 `nodebuffer` to generate an `ArrayBuffer`, `Blob` or `nodebuffer`, or
 `base64` to generate a base64-encoded string.
 
+
+### Tables 2 working with matrices.
+
+Also, you can build composite tables of multiple rows. In this case, each the placeholder 
+must have the prefix `matriz:` and contain only the name of Placeholder 
+variable (a list of objects).
+
+For example:
+
+    | ${matriz:headers}     |                    |
+    | ${matriz:people}      |                    |
+
+If the replacement value under `people` is an array of arrays, and each of
+those arrays have the information the a person, may end up with something like:
+
+    | Name        | Age |
+    | John Smith  | 20  |
+    | Bob Johnson | 22  |
+
+If a particular value is an array, then it will be repeated across columns as
+above.
+
+## Generating reports
+
+To make this magic happen, you need some code like this:
+
+```
+    var XlsxTemplate = require('xlsx-template');
+
+    // Load an XLSX file into memory
+    fs.readFile(path.join(__dirname, 'templates', 'template1.xlsx'), function(err, data) {
+
+        // Create a template
+        var template = new XlsxTemplate(data);
+
+        // Replacements take place on first sheet
+        var sheetNumber = 1;
+
+        // Set up some placeholder values matching the placeholders in the template
+        var values = {
+                extractDate: new Date(),
+                headers: [ "Name", "Age" ],
+                people: [
+                    ["John Smith",  20],
+                    ["Bob Johnson",  22]
+                ]
+            };
+
+        // Perform substitution
+        template.substitute(sheetNumber, values);
+
+        // Get binary data
+        var data = template.generate();
+
+        // ...
+
+    });
+```
+
+At this stage, `data` is a string blob representing the compressed archive that
+is the `.xlsx` file (that's right, a `.xlsx` file is a zip file of XML files,
+if you didn't know). You can send this back to a client, store it to disk,
+attach it to an email or do whatever you want with it.
+
+You can pass options to `generate()` to set a different return type. use
+`{type: 'uint8array'}` to generate a `Uint8Array`, `arraybuffer`, `blob`,
+`nodebuffer` to generate an `ArrayBuffer`, `Blob` or `nodebuffer`, or
+`base64` to generate a base64-encoded string.
+
 ## Caveats
 
 * The spreadsheet must be saved in `.xlsx` format. `.xls`, `.xlsb` or `.xlsm`
@@ -158,6 +230,13 @@ You can pass options to `generate()` to set a different return type. use
       column in the table as a logical range.
 * Placeholders only work in simple cells and tables, pivot tables or
   other such things.
+
+
+## Changelog
+
+### Version 0.2.1
+
+* The ability to insert a data matriz was added [[],[]] .
 
 ## Changelog
 
